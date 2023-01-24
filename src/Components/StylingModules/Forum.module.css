@@ -1,0 +1,11 @@
+.forum {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	margin-top: 5rem;
+}
+
+.tabContent {
+	/* z-index: -1; */
+	margin-bottom: 20rem;
+}

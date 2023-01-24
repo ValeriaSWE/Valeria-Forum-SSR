@@ -1,19 +1,17 @@
-import { Title } from "solid-start";
-import { HttpStatusCode } from "solid-start/server";
+// import Navbar from "../Components/Navbar";
+import { Title } from 'solid-start';
+import styles from './404.module.css';
 
 export default function NotFound() {
   return (
-    <main>
-      <Title>Not Found</Title>
-      <HttpStatusCode code={404} />
-      <h1>Page Not Found</h1>
-      <p>
-        Visit{" "}
-        <a href="https://start.solidjs.com" target="_blank">
-          start.solidjs.com
-        </a>{" "}
-        to learn how to build SolidStart apps.
-      </p>
-    </main>
-  );
+  <>
+  <Title>404 Sidan kunde inte hittas</Title>
+   <div class={styles.pageNotFound}>
+    <div class={styles.content}>
+      <i class="material-icons">error</i>
+      <h1>Sidan du söker verkar <br /> inte finnas.</h1>
+      <a onClick={() => {history.back()}}>Tillbaka</a>
+    </div>
+   </div>
+  </>)
 }
