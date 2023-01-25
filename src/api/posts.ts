@@ -2,7 +2,7 @@ import axios from "axios";
 import { URL } from "./common";
 
 export const GetPinnedPosts = () => axios.get(`${URL}/posts/getPinnedPosts/?sort=createdAt&page=0&limit=5`)
-export const GetAllPosts = (sort: string, page: number, limit: number, tags: string[]) => axios.get(`${URL}/posts/getAllPosts/?sort=${sort}&page=${page}&limit=${limit}&tags=${JSON.stringify(tags)}`)
+export const GetAllPosts = (sort: string, page: number, limit: number, tags: string[], search: string) => axios.get(`${URL}/posts/getAllPosts/?sort=${sort}&page=${page}&limit=${limit}&tags=${JSON.stringify(tags)}&search=${search}`)
 
 export const GetPost = (postId: string, commentSort: string, commentPage: number, commentLimit: number) => axios.get(`${URL}/posts/getPost/${postId}/?commentSort=${commentSort}&commentPage=${commentPage}&commentLimit=${commentLimit}`)
 export const GetImage = (imageId: string) => axios.get(`${URL}/posts/getImage/${imageId}`)
@@ -27,7 +27,7 @@ export const LikeComment = async (commentId: string, token: string) => axios.pos
         'Authorization': `Bearer ${token}`
     }
 })
-export const EditPost = (postId: string, content: string, tags: string[], token: string) => axios.post(`${URL}/posts/editPost`, {postId, content, tags}, {
+export const EditPost = (postId: string, content: string, tags: string[], token: string) => axios.post(`${URL}/posts/editPost`, { postId, content, tags }, {
     headers: {
         // 'content-type': 'multipart/form-data',
         'Authorization': `Bearer ${token}`

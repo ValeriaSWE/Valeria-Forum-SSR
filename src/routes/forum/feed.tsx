@@ -1,5 +1,5 @@
 import styles from './Feed.module.css';
-import { createSignal, For, Show } from 'solid-js';
+import { createRenderEffect, createSignal, For, Show } from 'solid-js';
 import { createStore } from 'solid-js/store'
 import PostPreview from '~/Components/PostPreview';
 import { GetAllPosts, GetAllTags, GetPinnedPosts } from '~/api/posts';
@@ -37,7 +37,7 @@ export function routeData() {
 
   const data = createRouteData( async () => {
     const pinnedPosts = (await GetPinnedPosts()).data.posts
-    const rawAllPosts = (await GetAllPosts(searchParams.sort || 'createdAt', parseInt(searchParams.page || "1") - 1, parseInt(searchParams.limit || "10"), []))
+    const rawAllPosts = (await GetAllPosts(searchParams.sort || 'createdAt', parseInt(searchParams.page || "1") - 1, parseInt(searchParams.limit || "10"), [], searchParams.search || ''))
 
 
     const pages = rawAllPosts.data.pages
@@ -62,6 +62,7 @@ function Feed() {
   
   const [sort, setSort] = createSignal(searchParams.sort || 'createdAt')
   const [page, setPage] = createSignal(parseInt(searchParams.page || "1"))
+  const [search, setSearch] = createSignal(searchParams.search || '')
   // const [pages, setPages] = createSignal(1)
   const [limit, setLimit] = createSignal(parseInt(searchParams.limit || "10"))
   
@@ -140,7 +141,7 @@ function Feed() {
         </div>
         <div class={styles.searchFeed}>        
             <i class='material-icons'>search</i>
-            <input type="text" placeholder='Sök efter Feed' />
+            <input type="text" placeholder='Sök efter Feed' use:model={[search, setSearch]} onkeydown={(e) => InputKeyPress(e)}/>
         </div>
         <a class={styles.editFeedIconButton} href="/forum/newpost"/*onclick={() => location.href="/forum/newpost"}*/>
           <i class='material-icons'>add</i>
@@ -150,6 +151,18 @@ function Feed() {
       </div>
     </div>
     </>)
+  }
+
+  function model(el, value) {
+    const [field, setField] = value();
+    createRenderEffect(() => (el.value = field()));
+    el.addEventListener("input", (e) => setField(e.target.value));
+  }
+
+  function InputKeyPress(e) {
+    if (e.key === 'Enter') {
+      sortPosts()
+    }
   }
 
   function PinnedPosts() {
@@ -322,7 +335,8 @@ function Feed() {
       setSearchParams({
         sort: sort(),
         page: page(),
-        limit: limit()
+        limit: limit(),
+        search: search(),
       })
 
       refetchRouteData().then(() => {
