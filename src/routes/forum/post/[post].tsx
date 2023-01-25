@@ -649,7 +649,9 @@ setting the data to the state. */
         <>
             {/* <Meta name="twitter:title" content={postData()?.post.title}/> */}
             
+            <Meta name="twitter:card" content="summary"/>
             <Meta name="twitter:image" content={postData()?.post.creatorPfp}/>
+            <Meta name="og:image" content={postData()?.post.creatorPfp}/>
             <Meta name="twitter:title" content={postData()?.post.title}/>
             <Meta name="twitter:description" content={postData()?.post.content}/>
             <Meta property="og:title" content={postData()?.post.title} />

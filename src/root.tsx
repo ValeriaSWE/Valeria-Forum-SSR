@@ -62,10 +62,10 @@ function BaseHead() {
         />
         <Meta
           name="twitter:image:src"
-          content="https://rare-gallery.com/uploads/posts/938399-Grand-Theft-Auto-V-FiveM-Mitsubishi-Lancer-Evo-X.png"
+          content="/images/valeria.png"
         />
         <Meta name="twitter:site" content="@valeriarp" />
-        <Meta name="twitter:card" content="summary_large_image" />
+        <Meta name="twitter:card" content="summary" />
         <Meta
           name="twitter:title"
           content="Valeria Roleplay · Sverige's bästa FiveM server*"
@@ -76,7 +76,7 @@ function BaseHead() {
         />
         <Meta
           property="og:image"
-          content="https://rare-gallery.com/uploads/posts/938399-Grand-Theft-Auto-V-FiveM-Mitsubishi-Lancer-Evo-X.png"
+          content="/images/valeria.png"
         />
         <Meta
           property="og:image:alt"

@@ -3,7 +3,7 @@ import { createSignal, For, Show } from 'solid-js';
 import { createStore } from 'solid-js/store'
 import PostPreview from '~/Components/PostPreview';
 import { GetAllPosts, GetAllTags, GetPinnedPosts } from '~/api/posts';
-import { useLocation } from 'solid-start';
+import { createRouteData, refetchRouteData, useLocation, useParams, useRouteData, useSearchParams } from 'solid-start';
 import Skeleton from "@suid/material/Skeleton"
 import PostTag from '~/Components/PostTag';
 import Forum from '~/Components/Forum';
@@ -32,19 +32,38 @@ export default function ForumFeed() {
   )
 }
 
+export function routeData() {  
+  const [searchParams] = useSearchParams()
+
+  const data = createRouteData( async () => {
+    const pinnedPosts = (await GetPinnedPosts()).data.posts
+    const rawAllPosts = (await GetAllPosts(searchParams.sort || 'createdAt', parseInt(searchParams.page || "1") - 1, parseInt(searchParams.limit || "10"), []))
+
+
+    const pages = rawAllPosts.data.pages
+    const allPosts = rawAllPosts.data.posts
+
+    return {pinnedPosts, allPosts, pages}
+  })
+
+  return data
+}
+
 function Feed() {
   
   
-  const [allPosts, setAllPosts] = createSignal([])
-  const [allPostsLoaded, setAllPostsLoaded] = createSignal(false)
-  const [pinnedPosts, setPinnedPosts] = createSignal([])
-  const search = useLocation().search
-  const searchParams = new URLSearchParams(search)
+  // const [allPosts, setAllPosts] = createSignal([])
+  const postsRaw = useRouteData<typeof routeData>()
+  const [allPostsLoaded, setAllPostsLoaded] = createSignal(true)
+  // const [pinnedPosts, setPinnedPosts] = createSignal([])
+  const [searchParams, setSearchParams] = useSearchParams()
+  // const search = useLocation().search
+  // const searchParams = new URLSearchParams(search)
   
-  const [sort, setSort] = createSignal(searchParams.get('sort') || 'createdAt')
-  const [page, setPage] = createSignal(parseInt(searchParams.get('page')|| "1"))
-  const [pages, setPages] = createSignal(1)
-  const [limit, setLimit] = createSignal(parseInt(searchParams.get('limit')|| "10"))
+  const [sort, setSort] = createSignal(searchParams.sort || 'createdAt')
+  const [page, setPage] = createSignal(parseInt(searchParams.page || "1"))
+  // const [pages, setPages] = createSignal(1)
+  const [limit, setLimit] = createSignal(parseInt(searchParams.limit || "10"))
   
   const [tags, setTags] = createStore([])
 
@@ -111,7 +130,7 @@ function Feed() {
             <button class={styles.editFeedIconButton} onClick={() => {setPage(page() - 1); sortPosts();}}><i class='material-icons'>navigate_before</i></button>
           </Show>
           <button class={styles.editFeedIconButton} style="cursor: unset;">Sida: {page()}</button>
-          <Show when={page() < pages()} fallback={
+          <Show when={page() < postsRaw()?.pages} fallback={
             <button class={styles.editFeedIconButton} style="background-color: var(--color-white-m); cursor: unset;"><i class='material-icons'>navigate_next</i></button>
           }>
             <button class={styles.editFeedIconButton} onClick={() => {setPage(page() + 1); sortPosts();}}><i class='material-icons'>navigate_next</i></button>
@@ -135,14 +154,14 @@ function Feed() {
 
   function PinnedPosts() {
     
-    GetPinnedPosts().then((PinnedPosts) => {
-      setPinnedPosts(PinnedPosts.data.posts)
-    })
+    // GetPinnedPosts().then((PinnedPosts) => {
+    //   setPinnedPosts(PinnedPosts.data.posts)
+    // })
 
     return (
       <>
         <div id="pinned-posts">
-          <For each={pinnedPosts()}>{post =>
+          <For each={postsRaw()?.pinnedPosts}>{post =>
             <PostPreview data={post} />
           }</For>
         </div>
@@ -152,14 +171,14 @@ function Feed() {
 
   function AllPosts() {
 
-    sortPosts()
+    // sortPosts()
 
 
     return (
       <>
         <div class={styles.posts} id="all-posts">
           <Show when={allPostsLoaded()} fallback={Loader}>
-            <For each={allPosts()}>{post =>
+            <For each={postsRaw()?.allPosts}>{post =>
               <PostPreview data={post} />
             }</For>
           </Show>
@@ -192,7 +211,7 @@ function Feed() {
           }>
               <button class={styles.editFeedIconButton} onClick={() => {setPage(page() - 1); sortPosts();}}><i class='material-icons'>navigate_before</i></button>
           </Show>
-          <Show when={pages() < 15} fallback={
+          <Show when={postsRaw()?.pages < 15} fallback={
             <>
               {/* Make style work when there is alot of pages */}
               <Show when={page() <= 3}>
@@ -200,20 +219,20 @@ function Feed() {
                   <PageButton v={v} />
                 }</For>
                 <p>...</p>
-                <For each={[pages() - 1]}>{(v, i) =>
+                <For each={[postsRaw()?.pages - 1]}>{(v, i) =>
                   <PageButton v={v} />
                 }</For>
               </Show>
-              <Show when={page() >= pages() - 3}>
+              <Show when={page() >= postsRaw()?.pages - 3}>
                 <For each={[0]}>{(v, i) =>
                   <PageButton v={v} />
                 }</For>
                 <p>...</p>
-                <For each={[pages() - 3, pages() - 2, pages() - 1]}>{(v, i) =>
+                <For each={[postsRaw()?.pages - 3, postsRaw()?.pages - 2, postsRaw()?.pages - 1]}>{(v, i) =>
                   <PageButton v={v} />
                 }</For>
               </Show>
-              <Show when={page() < pages() - 3 && page() > 3}>
+              <Show when={page() < postsRaw()?.pages - 3 && page() > 3}>
                 <For each={[0]}>{(v, i) =>
                   <PageButton v={v} />
                 }</For>
@@ -222,17 +241,17 @@ function Feed() {
                   <PageButton v={v} />
                 }</For>
                 <p>...</p>
-                <For each={[pages() - 1]}>{(v, i) =>
+                <For each={[postsRaw()?.pages - 1]}>{(v, i) =>
                   <PageButton v={v} />
                 }</For>
               </Show>
             </>
           }>
-            <For each={[... Array(pages()).keys()]}>{(v, i) =>
+            <For each={[... Array(postsRaw()?.pages).keys()]}>{(v, i) =>
               <PageButton v={v} />
             }</For>
           </Show>
-          <Show when={page() < pages()} fallback={
+          <Show when={page() < postsRaw()?.pages} fallback={
               <button class={styles.editFeedIconButton} style="background-color: var(--color-white-m); cursor: unset;"><i class='material-icons'>navigate_next</i></button>
           }>
               <button class={styles.editFeedIconButton} onClick={() => {setPage(page() + 1); sortPosts();}}><i class='material-icons'>navigate_next</i></button>
@@ -272,7 +291,7 @@ function Feed() {
 
   return(
     <>
-      <Show when={allPosts()}>
+      <Show when={postsRaw()?.allPosts}>
         <FeedContainer>
           <PinnedPosts />
           <EditFeedResult />
@@ -294,13 +313,22 @@ function Feed() {
     })
 
     setAllPostsLoaded(false)
-    GetAllPosts(sort(), page() - 1, limit(), tagList).then((AllPosts) => {
-      setAllPosts(AllPosts.data.posts)
-      setPages(AllPosts.data.pages)
-      searchParams.set('sort', sort())
-      searchParams.set('page', page().toString())
-      searchParams.set('limit', limit().toString())
-      setAllPostsLoaded(true)
-    })
+    // GetAllPosts(sort(), page() - 1, limit(), tagList).then((AllPosts) => {
+      // setAllPosts(AllPosts.data.posts)
+      // setPages(AllPosts.data.pages)
+      // searchParams.set('sort', sort())
+      // searchParams.set('page', page().toString())
+      // searchParams.set('limit', limit().toString())
+      setSearchParams({
+        sort: sort(),
+        page: page(),
+        limit: limit()
+      })
+
+      refetchRouteData().then(() => {
+        setAllPostsLoaded(true)
+      })
+      // setAllPostsLoaded(true)
+    // })
   }
 }

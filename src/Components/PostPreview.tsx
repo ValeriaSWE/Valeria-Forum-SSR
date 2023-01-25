@@ -39,7 +39,7 @@ export default function PostPreview(props: {
         isEdited: boolean,
     };
 }) {
-    const [likedByUser, setLikedByUser] = createSignal(props.data.likes.includes(JSON.parse(localStorage.getItem('profile'))?.result._id))
+    const [likedByUser, setLikedByUser] = createSignal(false )//props.data.likes.includes(JSON.parse(localStorage.getItem('profile'))?.result._id))
     const [likeCount, setLikeCount] = createSignal(props.data.likes.length)
 
     const ShowRoleInPost = (props: {
