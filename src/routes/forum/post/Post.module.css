@@ -7,7 +7,7 @@ a {
 	--post-width: 70vw;
 	--profile-picture: 3rem;
 
-	height: auto;
+	/* height: auto; */
 	width: clamp(40rem, var(--post-width), 70rem);
 	border-radius: var(--border-radius);
 
@@ -160,13 +160,14 @@ a {
 	max-width: 100%;
 }
 
-.inheritPost .postContent .content code {
+.inheritPost .postContent pre:has(code) {
 	border-radius: var(--border-radius);
 	user-select: text;
 	background: var(--color-white-l);
 	box-shadow: inset 1px 1px 4px rgb(0 0 0 / 20%);
+	padding: 1rem;
 }
-.inheritPost .postContent .content code * {
+.inheritPost .postContent code * {
 	user-select: text;
 }
 /* * markdown styling end */

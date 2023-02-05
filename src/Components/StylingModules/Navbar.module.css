@@ -114,8 +114,14 @@
 }
 
 .navbar .dropdown .menuitem {
+	outline: none;
+	border: none;
 	height: 50px;
-	width: calc(300px - 16px);
+	width: 100%;
+	background-color: transparent;
+	color: white;
+	font-size: 1.125rem;
+	box-sizing: border-box;
 	padding: 2px 8px;
 	display: flex;
 	flex-direction: row;
@@ -123,6 +129,7 @@
 	align-items: center;
 	border-radius: var(--border-radius);
 	transition: background 300ms;
+	cursor: pointer;
 }
 .navbar .dropdown .menuitem:hover {
 	background-color: rgba(241, 241, 241, 0.557);

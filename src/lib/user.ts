@@ -6,7 +6,16 @@ import jwt_decode from "jwt-decode"
  */
 export const Auth = async (data) => {
     // localStorage.setItem('profile', JSON.stringify({ ...data }))
+    // return createServerData$(
+    //     async (data, event) => {
+    //         console.log(data)
+    //         return
+    //     },
+    //     { key: () => data }
+    // )
 }
+// import { createCookieSessionStorage } from "solid-start";
+// import { createServerData$ } from "solid-start/server/data";
 
 /**
  * CheckAuthLevel takes a token and an authLevel, and checks if user has acces to route.

@@ -1,11 +1,11 @@
 import axios from "axios";
 import { URL } from "./common";
 
-export const LoginUserServerPost = (username: String, password: String) => axios.post(`${URL}/user/login`, {username, password})
+export const LoginUserServerPost = (username: String, password: String) => axios.post(`${URL}/user/login`, { username, password })
 
-export const RegisterUserServerPost = (email: String, password: String, passwordConfirm: String, username: String) => axios.post(`${URL}/user/register`, {email, password, passwordConfirm, username})
+export const RegisterUserServerPost = (email: String, password: String, passwordConfirm: String, username: String) => axios.post(`${URL}/user/register`, { email, password, passwordConfirm, username })
 
-export const SetUserInfo = (token:string, oldPassword: string, newPassword: string, newPasswordConfirm: string, newUsername: string, about: string) => axios.post(`${URL}/user/edit`, {newUsername, oldPassword, newPassword, newPasswordConfirm, about}, {
+export const SetUserInfo = (token: string, oldPassword: string, newPassword: string, newPasswordConfirm: string, newUsername: string, about: string) => axios.post(`${URL}/user/edit`, { newUsername, oldPassword, newPassword, newPasswordConfirm, about }, {
     headers: {
         'Authorization': `Bearer ${token}`
     }

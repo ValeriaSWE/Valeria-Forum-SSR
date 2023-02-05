@@ -99,7 +99,7 @@
 	text-overflow: ellipsis;
 }
 
-.post .postTitle p {
+.post .postTitle div {
 	height: 2.5ch;
 	font-size: 0.85rem;
 	color: var(--color-blue-d);
@@ -109,11 +109,11 @@
 	text-overflow: ellipsis;
 }
 
-.post .postTitle > p * {
+.post .postTitle > div * {
 	font-size: inherit;
 }
 
-.post .postTitle > p a {
+.post .postTitle > div a {
 	text-decoration: underline;
 	color: var(--color-blue-d);
 	font-weight: 700;

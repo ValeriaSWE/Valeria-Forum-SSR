@@ -1,7 +1,7 @@
 {
 	"name": "valeria-forum-ssr",
 	"scripts": {
-		"dev": "solid-start dev",
+		"dev": "solid-start dev -p 4000",
 		"build": "solid-start build",
 		"start": "solid-start start"
 	},
@@ -16,6 +16,9 @@
 		"vite": "^3.2.5"
 	},
 	"dependencies": {
+		"@daimond113/solid-markdown": "^1.2.0",
+		"@solid-auth/core": "^0.0.6",
+		"@solid-auth/socials": "^0.0.8",
 		"@solidjs/meta": "^0.28.2",
 		"@solidjs/router": "^0.7.0",
 		"@suid/icons-material": "^0.5.5",
@@ -24,6 +27,7 @@
 		"axios": "^0.21.4",
 		"jquery": "^3.6.3",
 		"jwt-decode": "^3.1.2",
+		"mongoose": "^6.9.0",
 		"solid-highlight": "^0.1.12",
 		"solid-js": "^1.6.9",
 		"solid-start": "^0.2.15",
@@ -31,5 +35,10 @@
 	},
 	"engines": {
 		"node": ">=16.8"
+	},
+	"prittier": {
+		"singleQuote": true,
+		"trailingComma": "all",
+		"tabWidth": 1
 	}
 }
